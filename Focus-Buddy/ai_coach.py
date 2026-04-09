@@ -1,8 +1,14 @@
+import os
+
 import requests
+from dotenv import load_dotenv
 
 
-# 请将下面的配置替换成你自己的 OpenAI 兼容接口信息
-API_KEY = "请在这里填写你的 API_KEY"
+# 在程序启动时加载本地 .env 文件中的环境变量
+load_dotenv()
+
+# 从环境变量中动态读取 API Key，避免把密钥写死在代码里
+API_KEY = os.getenv("LLM_API_KEY")
 API_URL = "https://api.example.com/v1/chat/completions"
 MODEL_NAME = "your-model-name"
 
@@ -20,6 +26,10 @@ def get_micro_task(emotion: str) -> str:
     返回：
         模型生成的微动作指令；如果调用失败，则返回备用字符串。
     """
+    # 如果没有读取到 API Key，直接抛出明确错误，提醒检查 .env 配置
+    if not API_KEY:
+        raise ValueError("未找到 LLM_API_KEY，请检查 .env 文件配置")
+
     # 按要求硬编码 System Prompt，并把 emotion 动态插入提示词中
     system_prompt = (
         "你是一个针对极度焦虑大学生的行为干预教练。严禁说教、严禁灌鸡汤。"
@@ -27,10 +37,6 @@ def get_micro_task(emotion: str) -> str:
         "你必须在 40 个字以内，给出一个不需要动脑的、立刻能执行的物理微动作指令"
         "（例如：喝水、深呼吸、在纸上画圈），帮助他们重置注意力。"
     )
-
-    # 如果还没有填写真实 API_KEY，就直接返回备用结果，避免请求报错
-    if not API_KEY or "请在这里填写" in API_KEY:
-        return FALLBACK_TEXT
 
     headers = {
         "Authorization": f"Bearer {API_KEY}",
