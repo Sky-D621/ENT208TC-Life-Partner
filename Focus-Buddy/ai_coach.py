@@ -9,8 +9,8 @@ load_dotenv()
 
 # 从环境变量中动态读取 API Key，避免把密钥写死在代码里
 API_KEY = os.getenv("LLM_API_KEY")
-API_URL = "https://api.example.com/v1/chat/completions"
-MODEL_NAME = "your-model-name"
+API_URL = "https://api.deepseek.com/chat/completions"
+MODEL_NAME = "deepseek-chat"
 
 # 当接口调用失败时，返回这条备用提示
 FALLBACK_TEXT = "深呼吸3次，然后闭眼休息2分钟。"
@@ -53,7 +53,7 @@ def get_micro_task(emotion: str) -> str:
             },
         ],
         "temperature": 0.3,
-        "max_tokens": 50,
+        "max_tokens": 60,
     }
 
     try:

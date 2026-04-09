@@ -90,15 +90,16 @@ streamlit run app.py
 ## 📁 Directory Structure (目录结构)
 
 ```
-ENT208TC-Focus-Buddy/
+ENT/
 │
-├── app.py                # Main Streamlit application and UI routing
-├── ai_coach.py           # LLM API integration and System Prompt logic
-├── logger.py             # Local CSV data persistence handlers
 ├── requirements.txt      # Python package dependencies
-├── .env.example          # Example environment variables template
+├── .env          
 ├── .gitignore            # Git ignore rules (excludes .env and data files)
 └── README.md             # Project documentation
+└── Focus-Buddy
+    ├── app.py            # Main Streamlit application and UI routing
+    ├── logger.py         # Local CSV data persistence handlers
+    └── ai_coach.py       # LLM API integration and System Prompt logic
 ```
 
 ## 🔒 Data Privacy Statement (数据隐私说明)
