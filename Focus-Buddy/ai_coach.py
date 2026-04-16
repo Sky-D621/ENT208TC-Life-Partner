@@ -12,7 +12,15 @@ API_KEY = os.getenv("LLM_API_KEY")
 API_URL = "https://api.deepseek.com/v1/chat/completions"
 MODEL_NAME = "deepseek-chat"
 
-# 接口调用失败时的备用返回
+# 本地降级方案：当 API 失败时，直接返回预设的微任务建议
+LOCAL_FALLBACK_TASKS = {
+    "焦虑": "慢慢深呼吸3次，再喝一口水。",
+    "枯燥": "立刻站起来伸个懒腰10秒。",
+    "困难": "先写下当前最小下一步动作。",
+    "手机诱惑": "把手机扣下，放到手够不到处。",
+}
+
+# 未命中具体情绪时的通用备用返回
 FALLBACK_TEXT = "深呼吸3次，然后闭眼休息2分钟。"
 
 
@@ -43,6 +51,22 @@ def build_system_prompt(emotion: str, mode: str) -> str:
     raise ValueError("mode 仅支持 'empathetic' 或 'strict'")
 
 
+def get_local_fallback_task(emotion: str) -> str:
+    """
+    根据情绪关键词返回本地降级微任务建议。
+
+    参数：
+        emotion: 用户当前的分心情绪
+    """
+    normalized_emotion = (emotion or "").strip()
+
+    for keyword, task in LOCAL_FALLBACK_TASKS.items():
+        if keyword in normalized_emotion:
+            return task
+
+    return FALLBACK_TEXT
+
+
 def get_micro_task(emotion: str, mode: str = "empathetic") -> str:
     """
     根据用户当前的分心情绪和干预模式，调用大模型生成微动作指令。
@@ -52,7 +76,7 @@ def get_micro_task(emotion: str, mode: str = "empathetic") -> str:
         mode: 干预模式，默认值为 'empathetic'，支持 'strict'
 
     返回：
-        模型生成的微动作指令；如果接口调用失败，则返回备用字符串。
+        模型生成的微动作指令；如果接口调用失败，则返回本地降级结果。
     """
     # 如果没有读取到 API Key，直接抛出明确错误
     if not API_KEY:
@@ -79,7 +103,7 @@ def get_micro_task(emotion: str, mode: str = "empathetic") -> str:
     }
 
     try:
-        response = requests.post(API_URL, headers=headers, json=payload, timeout=30)
+        response = requests.post(API_URL, headers=headers, json=payload, timeout=5)
         response.raise_for_status()
 
         result = response.json()
@@ -87,10 +111,19 @@ def get_micro_task(emotion: str, mode: str = "empathetic") -> str:
 
         if content:
             return content
-        return FALLBACK_TEXT
+        return get_local_fallback_task(emotion)
 
-    except (requests.RequestException, KeyError, IndexError, ValueError, TypeError):
-        return FALLBACK_TEXT
+    except (
+        requests.Timeout,
+        requests.ConnectionError,
+        requests.HTTPError,
+        requests.RequestException,
+        KeyError,
+        IndexError,
+        ValueError,
+        TypeError,
+    ):
+        return get_local_fallback_task(emotion)
 
 
 if __name__ == "__main__":
