@@ -18,10 +18,10 @@ The hardware connection is handled by the Python backend, not by the browser.
 ```text
 M5Stack sensor
   -> COM5 serial data
-  -> Focus-Buddy/sensor_monitor.py
-  -> Focus-Buddy/elderly_health_logs.csv + sensor_monitor_heartbeat.txt
-  -> Focus-Buddy/api_server.py
-  -> Focus-Buddy/frontend/family.html and elderly.html
+  -> Life-Partner/sensor_monitor.py
+  -> Life-Partner/elderly_health_logs.csv + sensor_monitor_heartbeat.txt
+  -> Life-Partner/api_server.py
+  -> Life-Partner/frontend/family.html and elderly.html
 ```
 
 `api_server.py` is the main entry point for demo usage. It starts the local HTTP API and also starts the sensor monitor in a background thread.
@@ -33,7 +33,7 @@ ENT/
 ├── .env
 ├── .gitignore
 ├── README.md
-└── Focus-Buddy/
+└── Life-Partner/
     ├── ai_coach.py
     ├── api_server.py
     ├── sensor_monitor.py
@@ -75,7 +75,7 @@ Notes:
 From the backend folder:
 
 ```powershell
-cd C:\Users\ROG-PC\Desktop\ENT\Focus-Buddy
+cd C:\Users\ROG-PC\Desktop\ENT\Life-Partner
 pip install -r requirements-api.txt
 pip install pyserial python-dotenv requests
 ```
@@ -87,15 +87,15 @@ If `pyserial`, `python-dotenv`, and `requests` are already installed, the second
 Start the backend API and sensor monitor:
 
 ```powershell
-cd C:\Users\ROG-PC\Desktop\ENT\Focus-Buddy
+cd C:\Users\ROG-PC\Desktop\ENT\Life-Partner
 python api_server.py
 ```
 
 Then open the frontend pages:
 
 ```text
-C:\Users\ROG-PC\Desktop\ENT\Focus-Buddy\frontend\family.html
-C:\Users\ROG-PC\Desktop\ENT\Focus-Buddy\frontend\elderly.html
+C:\Users\ROG-PC\Desktop\ENT\Life-Partner\frontend\family.html
+C:\Users\ROG-PC\Desktop\ENT\Life-Partner\frontend\elderly.html
 ```
 
 The frontend pages call:
@@ -165,10 +165,10 @@ Main status response example:
 Runtime files are generated locally and ignored by Git:
 
 ```text
-Focus-Buddy/elderly_health_logs.csv
-Focus-Buddy/sensor_monitor_heartbeat.txt
-Focus-Buddy/sensor_monitor_debug.json
-Focus-Buddy/settings.json
+Life-Partner/elderly_health_logs.csv
+Life-Partner/sensor_monitor_heartbeat.txt
+Life-Partner/sensor_monitor_debug.json
+Life-Partner/settings.json
 ```
 
 Do not commit these files because they may contain private environment records or family settings.
@@ -178,7 +178,7 @@ Do not commit these files because they may contain private environment records o
 Generate mock data:
 
 ```powershell
-cd C:\Users\ROG-PC\Desktop\ENT\Focus-Buddy
+cd C:\Users\ROG-PC\Desktop\ENT\Life-Partner
 python generate_mock_data.py
 ```
 

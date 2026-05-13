@@ -1,0 +1,1 @@
+{"timestamp": "2026-05-08 11:18:20", "status": "OPEN_FAILED", "detail": "could not open port 'COM5': FileNotFoundError(2, '系统找不到指定的文件。', None, 2)", "raw_line": "", "port": "COM5", "baud": 115200}

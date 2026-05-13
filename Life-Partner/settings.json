@@ -1,0 +1,15 @@
+{
+  "profile": {
+    "name": "张奶奶",
+    "age": "76",
+    "health": "高血压",
+    "phone": "1"
+  },
+  "medications": [],
+  "alarms": [
+    {
+      "time": "10:00",
+      "label": "Breakfast"
+    }
+  ]
+}
